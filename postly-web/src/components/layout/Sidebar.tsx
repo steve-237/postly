@@ -17,6 +17,7 @@ const navigation = [
   { name: "Calendrier", href: "/calendar", icon: Calendar },
   { name: "Comptes liés", href: "/accounts", icon: Users },
   { name: "Statistiques", href: "/analytics", icon: BarChart3 },
+  { name: "Paramètres", href: "/settings", icon: Settings },
 ];
 
 export function Sidebar() {

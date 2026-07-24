@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Workspace {
+  id          String    @id @default(uuid())
+  name        String
+  ayrshareKey String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  accounts  Account[]
+  posts     Post[]
+}
+
+model Account {
+  id                String    @id @default(uuid())
+  workspaceId       String
+  workspace         Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  
+  platform          String    // "facebook", "instagram", "linkedin", etc.
+  providerAccountId String    // ID on the provider's side
+  accessToken       String
+  refreshToken      String?
+  expiresAt         Int?      // Unix timestamp
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  posts             Post[]    // Implicit many-to-many with Post
+}
+
+model Post {
+  id          String    @id @default(uuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  
+  text        String?
+  status      String    @default("DRAFT") // DRAFT, SCHEDULED, PUBLISHED, FAILED
+  scheduledAt DateTime?
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  accounts    Account[] // Implicit many-to-many with Account
+  media       Media[]
+}
+
+model Media {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  type      String   // "IMAGE", "VIDEO"
+  url       String   // Local path or URL
+  
+  createdAt DateTime @default(now())
+}

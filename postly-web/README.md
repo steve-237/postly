@@ -18,6 +18,7 @@ Create, schedule, format, and auto-publish content across **TikTok, LinkedIn, Fa
 
 ## 📖 Table of Contents
 - [🌟 Concept & Local-First Philosophy](#-concept--local-first-philosophy)
+- [💡 Why the Name "Postly"?](#-why-the-name-postly)
 - [✨ Key Features](#-key-features)
 - [🏗️ Technology Stack](#-technology-stack)
 - [📂 Project Architecture & File Structure](#-project-architecture--file-structure)
@@ -36,6 +37,16 @@ In a world dominated by expensive SaaS subscriptions and cloud vendor lock-in, *
 1. **Zero Hosting & Database Costs**: Your entire database (`dev.db` via SQLite), user preferences, and uploaded media files reside locally on your own machine.
 2. **Maximum Data Privacy**: Your API keys and social tokens are never stored on external third-party servers. API keys for AI models are securely stored in your browser's local storage or your local `.env` file.
 3. **Full Ownership & Portability**: You own your content pipeline from end to end. Backing up your workspace is as simple as copying your SQLite database file.
+
+---
+
+## 💡 Why the Name "Postly"?
+
+The name **Postly** was carefully chosen to reflect the core identity, speed, and philosophy of the application:
+- **"Post"**: Directly represents the primary mission of the platform — creating, formatting, scheduling, and publishing digital content across multiple social media networks (TikTok, LinkedIn, Meta).
+- **"-ly" (Suffix)**: A modern, dynamic suffix widely recognized in the SaaS and tech ecosystem (inspired by intuitive tools like *Calendly*, *Bitly*, or *Grammarly*). Linguistically, adding "-ly" transforms a core noun or verb into an adverb of manner — implying that your social media distribution is handled *smoothly, automatically, and reliably*.
+
+Together, **Postly** embodies an intelligent, frictionless digital assistant that removes the overhead of community management, allowing you to broadcast your brand's voice **consistently and effortlessly** from your own local machine.
 
 ---
 

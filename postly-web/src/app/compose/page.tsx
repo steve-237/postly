@@ -3,8 +3,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Sparkles, Image as ImageIcon, Video, Send, Clock, X, Settings2 } from "lucide-react";
 import { FaFacebook, FaLinkedin, FaTiktok } from "react-icons/fa";
+import { useAlertStore } from "@/store/useAlertStore";
 
 export default function ComposePage() {
+  const { showAlert } = useAlertStore();
   const [content, setContent] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -42,7 +44,7 @@ export default function ComposePage() {
 
   const handleGenerate = async () => {
     if (!content) {
-      alert("Veuillez d'abord taper un sujet ou une idée dans la zone de texte pour guider l'IA !");
+      showAlert("Sujet manquant", "Veuillez d'abord taper un sujet ou une idée dans la zone de texte pour guider l'IA !", "warning");
       return;
     }
     
@@ -60,12 +62,12 @@ export default function ComposePage() {
       const data = await res.json();
       
       if (data.error) {
-        alert(data.error);
+        showAlert("Erreur de l'IA", data.error, "error");
       } else if (data.text) {
         setContent(data.text);
       }
     } catch (error) {
-      alert("Erreur lors de la génération.");
+      showAlert("Erreur de génération", "Impossible de contacter le service d'intelligence artificielle. Veuillez réessayer dans quelques instants.", "error");
     } finally {
       setIsGenerating(false);
     }
@@ -87,7 +89,7 @@ export default function ComposePage() {
       const uploadData = await uploadRes.json();
       
       if (!uploadData.success) {
-        alert(uploadData.error);
+        showAlert("Échec de l'upload", uploadData.error, "error");
         return;
       }
 
@@ -118,7 +120,7 @@ export default function ComposePage() {
       setMediaUrls(prev => [...prev, finalUrl]);
       
     } catch (error) {
-      alert("Erreur lors de l'upload du fichier.");
+      showAlert("Erreur réseau", "Une erreur est survenue lors de l'envoi de votre fichier.", "error");
       setIsProcessingVideo(false);
     }
   };
@@ -129,12 +131,12 @@ export default function ComposePage() {
 
   const handleAction = async (action: "DRAFT" | "SCHEDULED" | "PUBLISHED") => {
     if (!content && mediaUrls.length === 0) {
-      alert("Votre post est vide !");
+      showAlert("Publication vide", "Veuillez rédiger un texte ou ajouter un média avant d'enregistrer.", "warning");
       return;
     }
 
     if (action === "SCHEDULED" && !scheduledAt) {
-      alert("Veuillez choisir une date et heure pour planifier.");
+      showAlert("Date de planification manquante", "Veuillez choisir une date et une heure pour programmer votre publication.", "warning");
       return;
     }
 
@@ -152,14 +154,14 @@ export default function ComposePage() {
       });
       const data = await res.json();
       if (data.success) {
-        if (action === "PUBLISHED") alert("Publication envoyée avec succès (Ayrshare) !");
-        else if (action === "SCHEDULED") alert("Post planifié avec succès !");
-        else alert("Brouillon enregistré !");
+        if (action === "PUBLISHED") showAlert("Publication réussie !", "Votre publication a été envoyée avec succès sur vos réseaux sociaux via Ayrshare !", "success");
+        else if (action === "SCHEDULED") showAlert("Publication programmée !", "Votre post a été ajouté à votre calendrier éditorial avec succès !", "success");
+        else showAlert("Brouillon sauvegardé", "Votre publication a été enregistrée dans vos brouillons.", "info");
       } else {
-        alert(data.error);
+        showAlert("Erreur lors de l'enregistrement", data.error, "error");
       }
     } catch (error) {
-      alert("Erreur lors de l'enregistrement.");
+      showAlert("Erreur serveur", "Impossible de communiquer avec le serveur pour enregistrer votre publication.", "error");
     } finally {
       setIsSaving(false);
     }

@@ -3,8 +3,10 @@
 import { Plus, ExternalLink, ShieldCheck, CheckCircle2, Trash2, KeyRound, Save, AlertCircle, X } from "lucide-react";
 import { FaFacebook, FaLinkedin, FaTiktok } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import { useAlertStore } from "@/store/useAlertStore";
 
 export default function AccountsPage() {
+  const { showAlert } = useAlertStore();
   const [connectedAccounts, setConnectedAccounts] = useState<string[]>([]);
   const [ayrshareKey, setAyrshareKey] = useState("");
   const [isSavingKey, setIsSavingKey] = useState(false);
@@ -35,9 +37,9 @@ export default function AccountsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ayrshareKey })
       });
-      alert("Clé Ayrshare sauvegardée avec succès !");
+      showAlert("Succès !", "Votre clé API Ayrshare a été enregistrée avec succès !", "success");
     } catch (error) {
-      alert("Erreur lors de la sauvegarde.");
+      showAlert("Erreur de sauvegarde", "Impossible de sauvegarder la clé Ayrshare. Veuillez vérifier votre connexion.", "error");
     } finally {
       setIsSavingKey(false);
     }
@@ -60,7 +62,7 @@ export default function AccountsPage() {
         setShowSetupModal(platform);
       }
     } catch (e) {
-      alert("Erreur lors de la vérification de la configuration.");
+      showAlert("Erreur de vérification", "Impossible de vérifier la configuration OAuth pour cette plateforme.", "error");
     }
   };
 

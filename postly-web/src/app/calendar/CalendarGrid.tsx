@@ -32,10 +32,10 @@ function DraggablePost({ post }: { post: Post }) {
       {...listeners}
       {...attributes}
       className={`px-2 py-1.5 rounded-lg text-[11px] font-bold truncate border shadow-sm transition-transform hover:scale-[1.02] cursor-grab active:cursor-grabbing relative ${
-        isPublished ? "bg-emerald-50 text-emerald-700 border-emerald-200/60" :
-        isScheduled ? "bg-purple-50 text-purple-700 border-purple-200/60" :
-        isFailed ? "bg-red-50 text-red-700 border-red-200/60" :
-        "bg-amber-50 text-amber-700 border-amber-200/60"
+        isPublished ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200/60 dark:border-emerald-800/60" :
+        isScheduled ? "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 border-purple-200/60 dark:border-purple-800/60" :
+        isFailed ? "bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200/60 dark:border-red-800/60" :
+        "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200/60 dark:border-amber-800/60"
       }`}
       title={post.text || "Post sans texte"}
     >
@@ -54,20 +54,20 @@ function DroppableDay({ day, posts }: { day: Date; posts: Post[] }) {
   return (
     <div 
       ref={setNodeRef}
-      className={`border-b border-r border-slate-100 p-2.5 min-h-[130px] transition-colors group relative ${
-        isOver ? "bg-indigo-50/60 ring-2 ring-indigo-400 ring-inset" : 
-        isCurrentDay ? "bg-indigo-50/30 hover:bg-slate-50" : "hover:bg-slate-50"
+      className={`border-b border-r border-slate-100 dark:border-slate-800 p-2.5 min-h-[130px] transition-colors group relative ${
+        isOver ? "bg-indigo-50/60 dark:bg-indigo-900/20 ring-2 ring-indigo-400 dark:ring-indigo-500 ring-inset" : 
+        isCurrentDay ? "bg-indigo-50/30 dark:bg-indigo-900/10 hover:bg-slate-50 dark:hover:bg-slate-800/50" : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
       }`}
     >
       <div className="flex justify-between items-start mb-2">
         <span className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold ${
           isCurrentDay ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 
-          'text-slate-600 group-hover:bg-slate-200 transition-colors'
+          'text-slate-600 dark:text-slate-400 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition-colors'
         }`}>
           {format(day, "d")}
         </span>
         {posts.length > 0 && (
-          <span className="text-[10px] font-bold text-slate-500 px-2 py-0.5 bg-white border border-slate-200 rounded-md shadow-sm pointer-events-none">
+          <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 px-2 py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md shadow-sm pointer-events-none">
             {posts.length} post{posts.length > 1 ? 's' : ''}
           </span>
         )}
@@ -78,7 +78,7 @@ function DroppableDay({ day, posts }: { day: Date; posts: Post[] }) {
           <DraggablePost key={post.id} post={post} />
         ))}
         {posts.length > 3 && (
-          <div className="text-xs text-center font-bold text-slate-400 mt-2 bg-slate-100 rounded-md py-1 pointer-events-none">
+          <div className="text-xs text-center font-bold text-slate-400 dark:text-slate-500 mt-2 bg-slate-100 dark:bg-slate-800 rounded-md py-1 pointer-events-none">
             +{posts.length - 3} autres
           </div>
         )}
@@ -159,23 +159,23 @@ export function CalendarGrid({ initialPosts }: { initialPosts: Post[] }) {
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden ring-1 ring-black/[0.02]">
+    <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-slate-100 dark:border-slate-800 overflow-hidden ring-1 ring-black/[0.02] dark:ring-white/[0.02]">
       {/* Mois en cours */}
-      <div className="px-6 py-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white flex items-center justify-between">
-        <h2 className="text-xl font-extrabold text-slate-800 capitalize">
+      <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-50 dark:from-slate-800/50 to-white dark:to-slate-900 flex items-center justify-between">
+        <h2 className="text-xl font-extrabold text-slate-800 dark:text-white capitalize">
           {format(today, "MMMM yyyy", { locale: fr })}
         </h2>
         <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1.5 text-xs font-bold text-slate-500"><div className="w-2.5 h-2.5 rounded-full bg-emerald-400"></div> Publié</span>
-          <span className="flex items-center gap-1.5 text-xs font-bold text-slate-500"><div className="w-2.5 h-2.5 rounded-full bg-purple-400"></div> Planifié</span>
-          <span className="flex items-center gap-1.5 text-xs font-bold text-slate-500"><div className="w-2.5 h-2.5 rounded-full bg-amber-400"></div> Brouillon</span>
+          <span className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400"><div className="w-2.5 h-2.5 rounded-full bg-emerald-400"></div> Publié</span>
+          <span className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400"><div className="w-2.5 h-2.5 rounded-full bg-purple-400"></div> Planifié</span>
+          <span className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400"><div className="w-2.5 h-2.5 rounded-full bg-amber-400"></div> Brouillon</span>
         </div>
       </div>
 
       {/* Jours de la semaine */}
-      <div className="grid grid-cols-7 border-b border-slate-100 bg-slate-50/80">
+      <div className="grid grid-cols-7 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/50">
         {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map(d => (
-          <div key={d} className="py-3 text-center text-xs font-extrabold text-slate-500 uppercase tracking-widest">
+          <div key={d} className="py-3 text-center text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
             {d}
           </div>
         ))}
@@ -185,7 +185,7 @@ export function CalendarGrid({ initialPosts }: { initialPosts: Post[] }) {
       <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-7 auto-rows-[minmax(130px,auto)]">
           {blanks.map((_, i) => (
-            <div key={`blank-${i}`} className="border-b border-r border-slate-100 bg-slate-50/50 p-2 min-h-[130px]"></div>
+            <div key={`blank-${i}`} className="border-b border-r border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 p-2 min-h-[130px]"></div>
           ))}
           
           {daysInMonth.map((day) => {

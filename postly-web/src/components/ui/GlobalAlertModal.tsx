@@ -26,8 +26,8 @@ export function GlobalAlertModal() {
   const isInfo = alert.type === "info";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-[2rem] w-full max-w-md shadow-[0_20px_60px_rgb(0,0,0,0.15)] overflow-hidden flex flex-col border border-white/80 ring-1 ring-black/5 scale-100 animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+      <div className="bg-white dark:bg-slate-900 rounded-[2rem] w-full max-w-md shadow-[0_20px_60px_rgb(0,0,0,0.15)] dark:shadow-black/50 overflow-hidden flex flex-col border border-white/80 dark:border-slate-800 ring-1 ring-black/5 dark:ring-white/5 scale-100 animate-in zoom-in-95 duration-200">
         
         {/* Header avec Icône */}
         <div className="p-6 pb-4 flex items-center justify-between">
@@ -35,12 +35,12 @@ export function GlobalAlertModal() {
             <div
               className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${
                 isError
-                  ? "bg-red-50 text-red-600 border border-red-100"
+                  ? "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-800"
                   : isSuccess
-                  ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                  ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800"
                   : isWarning
-                  ? "bg-amber-50 text-amber-600 border border-amber-100"
-                  : "bg-indigo-50 text-indigo-600 border border-indigo-100"
+                  ? "bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-800"
+                  : "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800"
               }`}
             >
               {isError && <XCircle className="w-6 h-6" />}
@@ -68,14 +68,14 @@ export function GlobalAlertModal() {
                   ? "Attention"
                   : "Information"}
               </span>
-              <h3 className="text-lg font-extrabold text-slate-800 leading-tight">
+              <h3 className="text-lg font-extrabold text-slate-800 dark:text-white leading-tight">
                 {alert.title}
               </h3>
             </div>
           </div>
           <button
             onClick={closeAlert}
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors self-start"
+            className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors self-start"
           >
             <X className="w-5 h-5" />
           </button>
@@ -83,7 +83,7 @@ export function GlobalAlertModal() {
 
         {/* Contenu du message */}
         <div className="px-6 py-4">
-          <p className="text-slate-600 text-[15px] leading-relaxed font-medium bg-slate-50/80 p-4 rounded-2xl border border-slate-100 whitespace-pre-wrap">
+          <p className="text-slate-600 dark:text-slate-300 text-[15px] leading-relaxed font-medium bg-slate-50/80 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 whitespace-pre-wrap">
             {alert.message}
           </p>
         </div>

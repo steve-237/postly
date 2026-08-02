@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
+/* Configuration pour next-themes avec Tailwind v4 (Class Strategy) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F8FAFC; /* bg-[#F8FAFC] */
+  --foreground: #1E293B; /* text-slate-800 */
 }
 
 @theme inline {
@@ -12,11 +15,10 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Fallback si on utilise les CSS variables natives */
+:root.dark {
+  --background: #020617; /* bg-slate-950 */
+  --foreground: #F1F5F9; /* text-slate-100 */
 }
 
 body {

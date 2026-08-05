@@ -67,9 +67,7 @@ async function tryPollinations(prompt: string): Promise<string> {
 
   if (!res.ok) {
     throw new Error(
-      res.status === 429
-        ? "Service IA temporairement surchargé (rate limit). Réessayez dans quelques secondes."
-        : `Erreur Pollinations (${res.status})`
+      "Le service IA public (Pollinations) est actuellement saturé ou hors ligne. Cliquez sur l'engrenage (⚙️) à côté du bouton pour utiliser une clé Google Gemini (qui est 100% gratuite et très fiable)."
     );
   }
 
@@ -87,6 +85,18 @@ async function tryPollinations(prompt: string): Promise<string> {
   }
 }
 
+function getLocalFallback(subject: string): string {
+  const safeSubject = subject.length > 50 ? "ce sujet" : subject;
+  const tag = subject.replace(/[^a-zA-Z0-9]/g, '').substring(0, 15) || "Trending";
+  
+  const templates = [
+    `🚀 Envie de tout savoir sur ${safeSubject} ? \n\nDécouvrez nos meilleures astuces et conseils exclusifs pour maîtriser le sujet comme un pro. N'hésitez pas à partager vos propres expériences en commentaire ! 👇\n\n#${tag} #Tips #Innovation`,
+    `💡 Focus du jour : ${safeSubject}.\n\nC'est le moment idéal pour faire le point et repenser notre approche. Qu'en pensez-vous ? Discutons-en ensemble dans les commentaires ! 🗣️\n\n#${tag} #Community #Debate`,
+    `🔥 Le saviez-vous ? Quand on parle de ${safeSubject}, les détails font toute la différence.\n\nRestez à l'affût, nous préparons du lourd sur ce sujet. Activez les notifications pour ne rien rater ! 🔔\n\n#${tag} #News #Tech`
+  ];
+  return templates[Math.floor(Math.random() * templates.length)];
+}
+
 export async function POST(request: Request) {
   try {
     const { prompt, provider = "pollinations", apiKey } = await request.json();
@@ -100,10 +110,17 @@ export async function POST(request: Request) {
 
     const systemPrompt = SYSTEM_PROMPT(prompt);
 
-    // ───── Pollinations (gratuit, sans clé) ─────
+    // ───── Pollinations (gratuit, sans clé) avec Fallback ─────
     if (provider === "pollinations") {
-      const text = await tryPollinations(prompt);
-      return NextResponse.json({ text });
+      try {
+        const text = await tryPollinations(prompt);
+        return NextResponse.json({ text });
+      } catch (error) {
+        // En cas d'échec (saturation), on déclenche le fallback local instantané
+        console.warn("Pollinations échoué, utilisation du fallback local.");
+        const text = getLocalFallback(prompt);
+        return NextResponse.json({ text, isFallback: true });
+      }
     }
 
     // ───── Google Gemini ─────
@@ -132,6 +149,34 @@ export async function POST(request: Request) {
       return NextResponse.json({
         text: data.candidates[0].content.parts[0].text,
       });
+    }
+
+    // ───── Groq AI ─────
+    if (provider === "groq") {
+      const key = apiKey || process.env.GROQ_API_KEY;
+      if (!key)
+        return NextResponse.json(
+          { error: "Clé API Groq manquante. Ajoutez-la dans les paramètres de l'IA." },
+          { status: 400 }
+        );
+
+      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${key}`,
+        },
+        body: JSON.stringify({
+          model: "llama3-8b-8192", // Modèle très rapide de Groq
+          messages: [{ role: "user", content: systemPrompt }],
+          temperature: 0.8,
+          max_tokens: 512,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok)
+        throw new Error(data.error?.message || "Erreur API Groq");
+      return NextResponse.json({ text: data.choices[0].message.content });
     }
 
     // ───── OpenAI ─────

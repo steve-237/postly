@@ -234,7 +234,8 @@ export default function ComposePage() {
                   className="flex-1 px-4 py-2.5 bg-white dark:bg-slate-800 border border-indigo-100 dark:border-indigo-900/50 rounded-xl text-sm font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
                 >
                   <option value="pollinations">Pollinations AI (Gratuit, Sans clé)</option>
-                  <option value="gemini">Google Gemini (Rapide)</option>
+                  <option value="groq">Groq AI (Ultra-rapide)</option>
+                  <option value="gemini">Google Gemini (Intelligent)</option>
                   <option value="openai">OpenAI ChatGPT (Performant)</option>
                 </select>
               </div>
@@ -244,7 +245,7 @@ export default function ComposePage() {
                   <label className="text-sm font-bold text-slate-700 dark:text-slate-300 w-32">Clé API :</label>
                   <input 
                     type="password"
-                    placeholder={`Votre clé API ${aiProvider === 'gemini' ? 'Google' : 'OpenAI'}...`}
+                    placeholder={`Votre clé API ${aiProvider === 'gemini' ? 'Google' : aiProvider === 'groq' ? 'Groq' : 'OpenAI'}...`}
                     value={apiKey}
                     onChange={(e) => handleApiKeyChange(e.target.value)}
                     className="flex-1 px-4 py-2.5 bg-white dark:bg-slate-800 border border-indigo-100 dark:border-indigo-900/50 rounded-xl text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
